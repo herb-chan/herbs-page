@@ -1,13 +1,16 @@
-"use client";
-
 import React, { useState, useRef, useCallback } from "react";
 import styles from "./notepad.module.css";
 
 export default function Notepad({ closeNotepad, zIndex, handleNotepadClick }) {
+    const [notes, setNotes] = useState("");
     const [isDragging, setIsDragging] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const notepadRef = useRef(null);
+
+    const handleInputChange = (e) => {
+        setNotes(e.target.value);
+    };
 
     const handleMouseMove = useCallback(
         (e) => {
@@ -20,11 +23,12 @@ export default function Notepad({ closeNotepad, zIndex, handleNotepadClick }) {
                 const notepadHeight = notepadRect.height;
 
                 const maxX = viewportWidth - notepadWidth;
-                const maxY = viewportHeight - notepadHeight;
+                const maxY = viewportHeight - notepadHeight; // Update this calculation
 
                 let currentX = e.clientX - dragStart.x;
                 let currentY = e.clientY - dragStart.y;
 
+                // Clamp within the bounds
                 currentX = Math.min(Math.max(currentX, 0), maxX);
                 currentY = Math.min(Math.max(currentY, 0), maxY);
 
@@ -59,7 +63,7 @@ export default function Notepad({ closeNotepad, zIndex, handleNotepadClick }) {
 
     return (
         <main
-            className={styles.terminal_window}
+            className={styles.notepad_window}
             style={{
                 transform: `translate(${position.x}px, ${position.y}px)`,
                 cursor: isDragging ? "grabbing" : "default",
@@ -83,7 +87,15 @@ export default function Notepad({ closeNotepad, zIndex, handleNotepadClick }) {
                 <div
                     className={`${styles.nav_button} ${styles.info_button}`}></div>
             </div>
-            <div className={styles.terminal_input_container}></div>
+            <div className={styles.notepad_input_container}>
+                <textarea
+                    spellcheck="false"
+                    className={styles.notepad_textarea}
+                    value={notes}
+                    onChange={handleInputChange}
+                    placeholder="Start typing here..."
+                />
+            </div>
         </main>
     );
 }

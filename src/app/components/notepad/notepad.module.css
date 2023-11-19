@@ -3,7 +3,7 @@
     src: url('/fonts/SFPRODISPLAYREGULAR.woff') format('woff');
 }
 
-.terminal_window {
+.notepad_window {
     display: flex;
     flex-direction: column;
     width: 50%;
@@ -70,58 +70,12 @@
     margin-right: 20px;
 }
 
-.terminal_input_container {
+.notepad_input_container {
     height: 550px;
     width: 100%;
     border-radius: 0px 0px 16px 16px;
     background-color: #272727;
-    overflow-y: auto;
-}
-
-.terminal_input_container::-webkit-scrollbar {
-    border-radius: 8px;
-    width: 20px;
-    height: 10px;
-}
-
-.terminal_input_container::-webkit-scrollbar-thumb {
-    background-color: #3d3d3d;
-    border-radius: 16px;
-}
-
-.terminal_input_container::-webkit-scrollbar-track {
-    background-color: #1b1b1b;
-    border-radius: 0px 0px 16px 16px;
-}
-
-.last_login {
-    font-family: 'SFPRO', sans-serif;
-    font-weight: 100;
-    color: #858585;
-    font-size: 18px;
-    margin-inline: 10px;
-}
-
-.output_area {
-    font-family: 'SFPRO', sans-serif;
-    font-weight: 100;
-    color: #fff;
-    font-size: 18px;
-    margin-inline: 10px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-.command_input_container {
-    display: flex;
-    flex-direction: row;
-    margin-inline: 10px;
-    gap: 2px;
-    font-family: 'SFPRO', sans-serif;
-    font-weight: 100;
-    font-size: 18px;
-    color: #fff;
+    overflow-y: hidden;
 }
 
 .command_output {
@@ -134,35 +88,34 @@
     color: #b4b4b4;
 }
 
-.default {
-    color: #b4b4b4;
-}
-
-.success {
-    color: #99e65f;
-}
-
-.tip {
-    color: #ffeb57;
-}
-
-.error {
-    color: #f5555d;
-}
-
-.input_field {
+.notepad_textarea {
     font-family: 'SFPRO', sans-serif;
     font-weight: 100;
     font-size: 18px;
     color: #fff;
+    height: 100%;
     width: 100%;
+    border-radius: 0px 0px 16px 16px;
     background-color: #272727;
+    outline: none;
+    resize: none;
     border: none;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    white-space: pre-wrap;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
-.input_field:focus {
-    outline: none;
+.notepad_textarea::-webkit-scrollbar {
+    border-radius: 8px;
+    width: 20px;
+    height: 10px;
+}
+
+.notepad_textarea::-webkit-scrollbar-thumb {
+    background-color: #3d3d3d;
+    border-radius: 16px;
+}
+
+.notepad_textarea::-webkit-scrollbar-track {
+    background-color: #1b1b1b;
+    border-radius: 0px 0px 16px 16px;
 }
