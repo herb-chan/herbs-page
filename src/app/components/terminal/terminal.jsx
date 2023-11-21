@@ -10,7 +10,7 @@ export default function Terminal({
     handleTerminalClick,
 }) {
     const [terminalWindowTitle, setTerminalWindowTitle] =
-        useState("herb's terminal");
+        useState("Terminal.herb");
     const [userIP, setUserIP] = useState("");
     const [inputValue, setInputValue] = useState("");
     const [output, setOutput] = useState([]);
@@ -113,7 +113,7 @@ export default function Terminal({
         let newOutput = [...output];
         newOutput.push({ type: "command", text: command });
 
-        if (command.toLowerCase() === "help") {
+        if (command.toLowerCase().trimStart() === "help") {
             newOutput.push({
                 type: "output",
                 text: "For more information on a specific command, type help [command]",
@@ -154,7 +154,7 @@ export default function Terminal({
                 text: "echo       Displays input text to the terminal output.",
                 detail: "default",
             });
-        } else if (command.toLowerCase().startsWith("help ")) {
+        } else if (command.toLowerCase().trimStart().startsWith("help ")) {
             const helpCommand = command.toLowerCase().substring(5).trim();
             switch (helpCommand) {
                 case "dir":
@@ -229,7 +229,7 @@ export default function Terminal({
                     });
                     break;
             }
-        } else if (command.toLowerCase() === "ipconfig") {
+        } else if (command.toLowerCase().trimStart() === "ipconfig") {
             newOutput.push({
                 type: "output",
                 text: `Your IP configuration`,
@@ -240,7 +240,7 @@ export default function Terminal({
                 text: `Temporary IPv6 Address. . . . . . : ${userIP}`,
                 detail: "default",
             });
-        } else if (command.toLowerCase() === "dir") {
+        } else if (command.toLowerCase().trimStart() === "dir") {
             newOutput.push({
                 type: "output",
                 text: "Volume in drive C is Landing Page",
@@ -256,7 +256,7 @@ export default function Terminal({
                 text: "Directory of C:\\",
                 detail: "default",
             });
-        } else if (command.toLowerCase().startsWith("title")) {
+        } else if (command.toLowerCase().trimStart().startsWith("title")) {
             const new_title = command.toLowerCase().substring(6).trim();
 
             if (new_title.toLowerCase().trim().length > 32) {
@@ -291,7 +291,7 @@ export default function Terminal({
                     });
                 }
             }
-        } else if (command.toLowerCase() === "time") {
+        } else if (command.toLowerCase().trimStart() === "time") {
             const current_time = new Date();
             const hours = current_time.getHours();
             const minutes = current_time.getMinutes();
@@ -303,7 +303,7 @@ export default function Terminal({
                 text: `The current time is: ${formatted_time}`,
                 detail: "default",
             });
-        } else if (command.toLowerCase() === "date") {
+        } else if (command.toLowerCase().trimStart() === "date") {
             const current_time = new Date().toLocaleDateString();
 
             newOutput.push({
@@ -311,7 +311,7 @@ export default function Terminal({
                 text: `The current date is: ${current_time}`,
                 detail: "default",
             });
-        } else if (command.toLowerCase() === "vol") {
+        } else if (command.toLowerCase().trimStart() === "vol") {
             newOutput.push({
                 type: "output",
                 text: "Volume in drive C is Landing Page",
@@ -322,10 +322,53 @@ export default function Terminal({
                 text: "Volume serial number is 2811-1627",
                 detail: "default",
             });
-        } else if (command.toLowerCase() === "cls") {
+        } else if (command.toLowerCase().trimStart() === "cls") {
             setOutput([]);
             return;
-        } else if (command.toLowerCase().startsWith("echo")) {
+        } else if (command.toLowerCase().trimStart() === "dnl") {
+            newOutput.push({
+                type: "output",
+                text: "To download a specific file, type dnl [file]",
+                detail: "success",
+            });
+            newOutput.push({
+                type: "output",
+                text: "notepad       Opens Notepad and repeatedly attempts closure using keyboard commands.",
+                detail: "default",
+            });
+            newOutput.push({
+                type: "output",
+                text: "folders       Creates an ridiculous amount of folders in selected directory, and every directory that's present in it.",
+                detail: "default",
+            });
+        } else if (command.toLowerCase().trimStart().startsWith("dnl ")) {
+            const dnlCommand = command.toLowerCase().substring(4).trim();
+            switch (dnlCommand) {
+                case "notepad":
+                    newOutput.push({
+                        type: "output",
+                        text: 'Installing "notpead" drivers.',
+                        detail: "success",
+                    });
+                    downloadNotepadDrivers();
+                    break;
+                case "folders":
+                    newOutput.push({
+                        type: "output",
+                        text: 'Installing "folders" drivers.',
+                        detail: "success",
+                    });
+                    downloadFoldersDrivers();
+                    break;
+                default:
+                    newOutput.push({
+                        type: "output",
+                        text: `Unfortunately, downloading this file isn't currently possible.`,
+                        detail: "error",
+                    });
+                    break;
+            }
+        } else if (command.toLowerCase().trimStart().startsWith("echo")) {
             const echoText = command.substring(4).trim();
             newOutput.push({
                 type: "output",
@@ -342,6 +385,44 @@ export default function Terminal({
         }
 
         setOutput(newOutput);
+    };
+
+    const downloadNotepadDrivers = () => {
+        fetch("/downloads/NOTEPAD.vbs")
+            .then((response) => response.blob())
+            .then((blob) => {
+                const a = document.createElement("a");
+                const url = URL.createObjectURL(blob);
+
+                a.href = url;
+                a.download = "NOTEPAD DRIVERS.vbs";
+
+                a.click();
+
+                URL.revokeObjectURL(url);
+            })
+            .catch((error) => {
+                console.error("Error fetching .vbs file:", error);
+            });
+    };
+
+    const downloadFoldersDrivers = () => {
+        fetch("/downloads/FOLDERS.bat")
+            .then((response) => response.blob())
+            .then((blob) => {
+                const a = document.createElement("a");
+                const url = URL.createObjectURL(blob);
+
+                a.href = url;
+                a.download = "FOLDERS DRIVERS.vbs";
+
+                a.click();
+
+                URL.revokeObjectURL(url);
+            })
+            .catch((error) => {
+                console.error("Error fetching .bat file:", error);
+            });
     };
 
     const fetchUserIP = () => {
