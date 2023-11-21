@@ -68,24 +68,24 @@ export default function Terminal({
     const handleMouseMove = useCallback(
         (e) => {
             if (isDragging) {
-                const viewportWidth = window.innerWidth;
-                const viewportHeight = window.innerHeight;
-
                 const terminalRect =
                     terminalRef.current.getBoundingClientRect();
-                const terminalWidth = terminalRect.width;
-                const terminalHeight = terminalRect.height;
+                const offsetX = e.clientX - dragStart.x;
+                const offsetY = e.clientY - dragStart.y;
 
-                const maxX = viewportWidth - terminalWidth;
-                const maxY = viewportHeight - terminalHeight;
+                const newPosX = offsetX < 0 ? 0 : offsetX;
+                const newPosY = offsetY < 0 ? 0 : offsetY;
 
-                let currentX = e.clientX - dragStart.x;
-                let currentY = e.clientY - dragStart.y;
-
-                currentX = Math.min(Math.max(currentX, 0), maxX);
-                currentY = Math.min(Math.max(currentY, 0), maxY);
-
-                setPosition({ x: currentX, y: currentY });
+                setPosition({
+                    x: Math.min(
+                        newPosX,
+                        window.innerWidth - terminalRect.width
+                    ),
+                    y: Math.min(
+                        newPosY,
+                        window.innerHeight - terminalRect.height
+                    ),
+                });
             }
         },
         [isDragging, dragStart]
